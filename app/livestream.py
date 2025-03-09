@@ -8,7 +8,10 @@ class LiveStream:
         self.web = web
         self.cam = cam
         self.ip = ip
-        self.num_blocks = int(num_blocks)
+        try: 
+            self.num_blocks = int(num_blocks)
+        except Exception:
+            self.num_blocks = 10
         self.buffer = deque(maxlen=10)
 
         # Инициализация детектора лиц
@@ -40,8 +43,9 @@ class LiveStream:
     def pixelate_image(self, image, blocks=3):
         # divide the input image into NxN blocks
         (h, w) = image.shape[:2]
-        xSteps = np.linspace(0, w, blocks + 1, dtype="int")
-        ySteps = np.linspace(0, h, blocks + 1, dtype="int")
+        true_blocks = min(h // 2, blocks)
+        xSteps = np.linspace(0, w, true_blocks + 1, dtype="int")
+        ySteps = np.linspace(0, h, true_blocks + 1, dtype="int")
         # loop over the blocks in both the x and y direction
         for i in range(1, len(ySteps)):
             for j in range(1, len(xSteps)):
