@@ -37,8 +37,8 @@ class LiveStream:
             # Увеличение размера эффекта
             self.scale_factor = 1.2
 
-    def update_buffer(self, prediction):
-        self.buffer.append(prediction)
+    def update_buffer(self, coords: tuple):
+        self.buffer.append(coords)
 
     def pixelate_image(self, image, blocks=3):
         # divide the input image into NxN blocks
@@ -96,9 +96,15 @@ class LiveStream:
                     # Замена соответствующей области в frame
                     frame[y1:y2, x1:x2] = self.pixelate_image(face_img, blocks=20)
 
+                    self.update_buffer((x1, y1, x2, y2))
+
                     # Накладываем текст на bbox
                     # cv2.putText(frame, "no text", (x, y-10),
                     #             cv2.FONT_HERSHEY_SIMPLEX, 0.9, color=(0, 255, 0), thickness=2)
+
+                if not faces:
+                    x1, y1, x2, y2 = self.buffer[-1]
+                    frame[y1:y2, x1:x2] = self.pixelate_image(frame[y1:y2, x1:x2], blocks=20)
 
                 # Отображение кадра
                 if self.web:
