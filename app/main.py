@@ -21,21 +21,32 @@ async def get_index(
 async def post_index(
     request: Request,
     camera: str = Form(...),
-    ip_address_input: str = Form(None)
+    ip_address_input: str = Form(None),
+    num_blocks_input: str = Form(None),
 ):
     global stream
 
     if camera == "webcam":
-        stream = LiveStream(web=True, cam="web")
+        stream = LiveStream(
+            web=True,
+            cam="web",
+            num_blocks=num_blocks_input
+        )
     elif camera == "phone" and ip_address_input:
-        stream = LiveStream(web=True, cam="phone", ip=ip_address_input)
+        stream = LiveStream(
+            web=True,
+            cam="phone",
+            ip=ip_address_input,
+            num_blocks=num_blocks_input
+        )
 
     return templates.TemplateResponse(
         "index.html",
         {
             "request": request,
             "camera": camera,
-            "ip_address": ip_address_input
+            "ip_address": ip_address_input,
+            "num_blocks": num_blocks_input,
         }
     )
 

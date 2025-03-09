@@ -7,10 +7,11 @@ IMG_SIZE = 48
 
 
 class LiveStream:
-    def __init__(self, web=True, cam="web", ip=None):
+    def __init__(self, web=True, cam="web", ip=None, num_blocks=10):
         self.web = web
         self.cam = cam
         self.ip = ip
+        self.num_blocks = int(num_blocks)
         self.buffer = deque(maxlen=10)
         self.threshold = 0.5
 
@@ -94,7 +95,7 @@ class LiveStream:
                     face_img = frame[y1:y2, x1:x2]
 
                     # Замена соответствующей области в frame
-                    frame[y1:y2, x1:x2] = self.pixelate_image(face_img, blocks=20)
+                    frame[y1:y2, x1:x2] = self.pixelate_image(face_img, blocks=self.num_blocks)
 
                     self.update_buffer((x1, y1, x2, y2))
 
@@ -104,7 +105,7 @@ class LiveStream:
 
                 if not faces:
                     x1, y1, x2, y2 = self.buffer[-1]
-                    frame[y1:y2, x1:x2] = self.pixelate_image(frame[y1:y2, x1:x2], blocks=20)
+                    frame[y1:y2, x1:x2] = self.pixelate_image(frame[y1:y2, x1:x2], blocks=self.num_blocks)
 
                 # Отображение кадра
                 if self.web:
