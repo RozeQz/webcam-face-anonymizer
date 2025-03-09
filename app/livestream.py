@@ -99,9 +99,10 @@ class LiveStream:
                     # cv2.putText(frame, "no text", (x, y-10),
                     #             cv2.FONT_HERSHEY_SIMPLEX, 0.9, color=(0, 255, 0), thickness=2)
 
-                if not faces:
-                    x1, y1, x2, y2 = self.buffer[-1]
-                    frame[y1:y2, x1:x2] = self.pixelate_image(frame[y1:y2, x1:x2], blocks=self.num_blocks)
+                if faces.size == 0:
+                    if len(self.buffer) > 0:
+                        x1, y1, x2, y2 = self.buffer[-1]
+                        frame[y1:y2, x1:x2] = self.pixelate_image(frame[y1:y2, x1:x2], blocks=self.num_blocks)
 
                 # Отображение кадра
                 if self.web:
