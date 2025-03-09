@@ -3,9 +3,6 @@ from collections import deque
 import numpy as np
 
 
-IMG_SIZE = 48
-
-
 class LiveStream:
     def __init__(self, web=True, cam="web", ip=None, num_blocks=10):
         self.web = web
@@ -13,7 +10,6 @@ class LiveStream:
         self.ip = ip
         self.num_blocks = int(num_blocks)
         self.buffer = deque(maxlen=10)
-        self.threshold = 0.5
 
         # Инициализация детектора лиц
         self.detector = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
