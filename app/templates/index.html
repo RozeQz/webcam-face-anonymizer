@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Anonymizer</title>
+    <script>
+        function toggleIpField() {
+            const cameraSelect = document.getElementById('camera');
+            const ipField = document.getElementById('ip_address_field');
+            if (cameraSelect.value === 'phone') {
+                ipField.style.display = 'block';
+            } else {
+                ipField.style.display = 'none';
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Webcam Anonymizer</h1>
+    <form method="post">
+        <label for="camera">Choose camera:</label>
+        <select id="camera" name="camera" onchange="toggleIpField()">
+            <option value="webcam">Webcam</option>
+            <option value="phone">Phone</option>
+        </select>
+        <br><br>
+        <div id="ip_address_field" style="display:none;">
+            <label for="ip_address">Enter IP address of your phone camera:</label>
+            <input type="text" id="ip_address" name="ip_address_input">
+        </div>
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>Video Stream</h2>
+    {% if camera == "webcam" %}
+    <!-- Видеопоток с вебкамеры -->
+    <img src="/video" width="600" alt="Webcam Video Stream">
+    {% elif camera == "phone" and ip_address %}
+    <!-- Видеопоток с камеры телефона -->
+    <iframe src="http://{{ ip_address }}/video" width="600" height="400"></iframe>
+    {% endif %}
+</body>
+
+</html>
